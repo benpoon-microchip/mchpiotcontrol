@@ -147,7 +147,7 @@
 
             $.ajax({
                 type: 'GET',
-                url: `https://41w5lvovy7.execute-api.ap-south-1.amazonaws.com/mchpiot-deleteuserdevices?thingName=${thingName}`,
+                url: `https://f7724fo7p1.execute-api.ap-south-1.amazonaws.com/mchpiot-deleteuserdevices?thingName=${thingName}`,
                 contentType: "application/json",
                 headers: {
                     "Auth-Token": userVariable.idToken
@@ -197,7 +197,7 @@
             //get user devices
             $.ajax({
                 type: 'GET',
-                url: 'https://41w5lvovy7.execute-api.ap-south-1.amazonaws.com/mchpiot-getuserdevices',
+                url: 'https://f7724fo7p1.execute-api.ap-south-1.amazonaws.com/mchpiot-getuserdevices',
                 contentType: "application/json",
                 headers: {
                     "Auth-Token": userVariable.idToken
@@ -274,7 +274,7 @@
             $("#registerButton").prop("disabled", true);
             $.ajax({
                 type: 'POST',
-                url: 'https://41w5lvovy7.execute-api.ap-south-1.amazonaws.com/mchpiot-registerdevice',
+                url: 'https://f7724fo7p1.execute-api.ap-south-1.amazonaws.com/mchpiot-registerdevice',
                 contentType: "application/json",
                 dataType: 'json',
                 data: JSON.stringify(registrationData),
