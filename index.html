@@ -195,6 +195,7 @@
 
         function refreshDevice() {
             //get user devices
+			console.info("userVariable.idToken: " + userVariable.idToken)
             $.ajax({
                 type: 'GET',
                 url: 'https://f7724fo7p1.execute-api.ap-south-1.amazonaws.com/mchpiot-getuserdevices',
