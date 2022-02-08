@@ -80,16 +80,14 @@
         function initCognitoSDK() {
             AWS.config.region = 'us-east-1'
             var authData = {
-                ClientId: "37hotv96muet086c7pf1b45okn", // Your client id here
-                AppWebDomain: "mchpiotcontrol.auth.us-east-1.amazoncognito.com",
+                ClientId: "xxxxxxxxxxxxxxxxxxxxxxxxxxxx", // Input: Your Cognito client id here
+                AppWebDomain: "xxxxxxxxxxxx.auth.us-east-1.amazoncognito.com",	// Input: Your Congnito domain name here
                 TokenScopesArray: ["email",
                     "openid"
                 ], // e.g.['phone', 'email', 'profile','openid', 'aws.cognito.signin.user.admin'],
-                RedirectUriSignIn: "https://benpoon-microchip.github.io/mchpiotcontrol",
-                RedirectUriSignOut: "https://benpoon-microchip.github.io/mchpiotcontrol",
-                //RedirectUriSignIn: "http://localhost:5500/mchpiotvoice",
-                //RedirectUriSignOut: "http://localhost:5500/mchpiotvoice",
-                UserPoolId: "us-east-1_exWLCVEvq", // Your user pool id here
+                RedirectUriSignIn: "https://xxxxxxxxxxxxxxx.github.io/mchpiotcontrol",	// Input: Your webpage url
+                RedirectUriSignOut: "https://xxxxxxxxxxxxxx.github.io/mchpiotcontrol",	// Input: Your webpage url
+                UserPoolId: "us-east-1_xxxxxx", // Input: Your Cognito user pool id here
             };
             var login = {};
             var auth = new AmazonCognitoIdentity.CognitoAuth(authData);
@@ -103,7 +101,7 @@
                         'UserPoolId'];
                     login[loginKey] = result.getIdToken().getJwtToken();
                     AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-                        IdentityPoolId: "us-east-1:f57e38f8-c53f-4602-a9c2-2ed7f2b08ea5", // Identity pool ID
+                        IdentityPoolId: "us-east-1:xxxxxxxxxxxxxxxxxx", // Input: Cognito identity pool ID
                         Logins: login
                     });
                     AWS.config.credentials.refresh((error) => {
@@ -147,7 +145,7 @@
 
             $.ajax({
                 type: 'GET',
-                url: `https://f7724fo7p1.execute-api.ap-south-1.amazonaws.com/mchpiot-deleteuserdevices?thingName=${thingName}`,
+                url: `https://xxxxxxxxx.execute-api.ap-south-1.amazonaws.com/mchpiot-deleteuserdevices?thingName=${thingName}`,
                 contentType: "application/json",
                 headers: {
                     "Auth-Token": userVariable.idToken
@@ -195,10 +193,9 @@
 
         function refreshDevice() {
             //get user devices
-			console.info("userVariable.idToken: " + userVariable.idToken)
             $.ajax({
                 type: 'GET',
-                url: 'https://f7724fo7p1.execute-api.ap-south-1.amazonaws.com/mchpiot-getuserdevices',
+                url: 'https://xxxxxxxxx.execute-api.ap-south-1.amazonaws.com/mchpiot-getuserdevices',
                 contentType: "application/json",
                 headers: {
                     "Auth-Token": userVariable.idToken
@@ -275,7 +272,7 @@
             $("#registerButton").prop("disabled", true);
             $.ajax({
                 type: 'POST',
-                url: 'https://f7724fo7p1.execute-api.ap-south-1.amazonaws.com/mchpiot-registerdevice',
+                url: 'https://xxxxxxxxx.execute-api.ap-south-1.amazonaws.com/mchpiot-registerdevice',
                 contentType: "application/json",
                 dataType: 'json',
                 data: JSON.stringify(registrationData),
