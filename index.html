@@ -78,18 +78,16 @@
         }
         // Initialize a cognito auth object.
         function initCognitoSDK() {
-            AWS.config.region = 'us-east-1'
+            AWS.config.region = 'us-east-2'
             var authData = {
-                ClientId: "37hotv96muet086c7pf1b45okn", // Your client id here
-                AppWebDomain: "mchpiotcontrol.auth.us-east-1.amazoncognito.com",
+                ClientId: "62j5v5hqkbjul07j2rgpq1djd7", // Input: Your Cognito client id here
+                AppWebDomain: "test1233234.auth.us-east-2.amazoncognito.com",	// Input: Your Congnito domain name here
                 TokenScopesArray: ["email",
                     "openid"
                 ], // e.g.['phone', 'email', 'profile','openid', 'aws.cognito.signin.user.admin'],
-                RedirectUriSignIn: "https://benpoon-microchip.github.io/mchpiotcontrol",
-                RedirectUriSignOut: "https://benpoon-microchip.github.io/mchpiotcontrol",
-                //RedirectUriSignIn: "http://localhost:5500/mchpiotvoice",
-                //RedirectUriSignOut: "http://localhost:5500/mchpiotvoice",
-                UserPoolId: "us-east-1_exWLCVEvq", // Your user pool id here
+                RedirectUriSignIn: "https://benpoon-microchip.github.io/mchpiotcontrol3",	// Input: Your webpage url
+                RedirectUriSignOut: "https://benpoon-microchip.github.io/mchpiotcontrol3",	// Input: Your webpage url
+                UserPoolId: "us-east-2_p4I1303Gm", // Input: Your Cognito user pool id here
             };
             var login = {};
             var auth = new AmazonCognitoIdentity.CognitoAuth(authData);
@@ -98,12 +96,12 @@
                     //console.info("Sign in success")
                     console.info("IDToken: " + result.getIdToken().getJwtToken())
                     $("#signInButton").html("<font color=\"red\">Signing in ...</font>")
-                    history.pushState({}, "", "/mchpiotcontrol/"); //clear token displayed in URL for aesthetics
+                    history.pushState({}, "", "/mchpiotcontrol3/"); //clear token displayed in URL for aesthetics
                     var loginKey = 'cognito-idp.' + AWS.config.region + '.amazonaws.com/' + authData[
                         'UserPoolId'];
                     login[loginKey] = result.getIdToken().getJwtToken();
                     AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-                        IdentityPoolId: "us-east-1:f57e38f8-c53f-4602-a9c2-2ed7f2b08ea5", // Identity pool ID
+                        IdentityPoolId: "us-east-2:428825e5-e46d-44ab-89a9-768f830bc265", // Input: Cognito identity pool ID
                         Logins: login
                     });
                     AWS.config.credentials.refresh((error) => {
@@ -147,7 +145,7 @@
 
             $.ajax({
                 type: 'GET',
-                url: `https://f7724fo7p1.execute-api.ap-south-1.amazonaws.com/mchpiot-deleteuserdevices?thingName=${thingName}`,
+                url: `https://7s1638dgmi.execute-api.us-east-2.amazonaws.com/deleteuserdevices?thingName=${thingName}`,
                 contentType: "application/json",
                 headers: {
                     "Auth-Token": userVariable.idToken
@@ -179,10 +177,8 @@
             }
             $('#deviceTable tbody').empty()
             Object.keys(data).forEach(function (thingName) {
-                friendlyName = data[thingName];
                 $('#deviceTable tbody').append(`<tr class="child">
                                                   <td>${thingName}</td>
-                                                  <td>${friendlyName}</td>
                                                   <td>  
                                                     <button type="button" class="close" onclick=removeDevice("${thingName}")>
                                                         <span class="fa fa-trash-o" />
@@ -195,10 +191,9 @@
 
         function refreshDevice() {
             //get user devices
-			console.info("userVariable.idToken: " + userVariable.idToken)
             $.ajax({
                 type: 'GET',
-                url: 'https://f7724fo7p1.execute-api.ap-south-1.amazonaws.com/mchpiot-getuserdevices',
+                url: 'https://7s1638dgmi.execute-api.us-east-2.amazonaws.com/getuserdevices',
                 contentType: "application/json",
                 headers: {
                     "Auth-Token": userVariable.idToken
@@ -226,7 +221,6 @@
 
         function onLoad() {
             $("#regSerial").val("")
-            $("#regFriendlyName").val("")
             $('#deviceTable').hide();
 
             $(document).popover({
@@ -268,14 +262,13 @@
                 return;
             }
             registrationData.deviceSerial = $("#regSerial").val().trim();
-            registrationData.deviceFriendlyName = $("#regFriendlyName").val().trim()
 
             $("#regResultDiv").html("<font color=\"green\">Requesting...</font>");
             $("#regResultDiv").show()
             $("#registerButton").prop("disabled", true);
             $.ajax({
                 type: 'POST',
-                url: 'https://f7724fo7p1.execute-api.ap-south-1.amazonaws.com/mchpiot-registerdevice',
+                url: 'https://7s1638dgmi.execute-api.us-east-2.amazonaws.com/registerdevice',
                 contentType: "application/json",
                 dataType: 'json',
                 data: JSON.stringify(registrationData),
@@ -294,7 +287,6 @@
                 },
                 complete: function () {
                     $("#regSerial").val("")
-                    $("#regFriendlyName").val("")
                     $("#registerButton").prop("disabled", false);
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -323,10 +315,10 @@
     <div class="container-fluid pl-5 pr-5">
         <div class="row">
             <div class="col mt-4 mb-4">
-                <a href="/mchpiotcontrol"> <img src="resources/img/mchpLogo.png" alt="Logo" class="img-responsive"
+                <a href="/mchpiotcontrol3"> <img src="resources/img/mchpLogo.png" alt="Logo" class="img-responsive"
                         align=left></a>
                 <h1 class="text-md-center  mt-5" style="font-size: 5.0vmin;">
-                    Microchip IoT: DevBoard registration page for voice control
+                    Microchip IoT: DevBoard registration page
                 </h1>
             </div>
         </div>
@@ -342,7 +334,6 @@
                         <thead>
                             <tr>
                                 <th scope="col" class="font-weight-normal text-center">Thing Name</th>
-                                <th scope="col" class="font-weight-normal text-center">Friendly Name</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -360,16 +351,11 @@
                 <form id="registrationForm">
                     <input type="text" class="form-control input-sm" style="box-shadow: none; border:0" id="regSerial"
                         placeholder="Thing Name" autocomplete="off" required="required" pattern="[a-zA-Z0-9]{1,40}" />
-                    <input type="text" class="form-control input-sm" id="regFriendlyName" placeholder="Friendly name for voice command"
-                        autocomplete="off" required="required" style="box-shadow: none; border:0"
-                        pattern="[a-zA-Z0-9 ]{1,30}" />
                 </form>
                 <div class="text-center mt-3">
                     <button type="button" class="btn btn-primary" id="registerButton"
                         onclick="registerDevice()">Register</button>
                     <br /><br /><br />
-                    <a href="https://www.amazon.com/gp/product/B08B5THZH5" target="_blank"> <img
-                            src="resources/img/APP_ICON.png" alt="APPLogo" align=center width=60>Enable Alexa Skill</a>
                 </div>
             </div>
             <div id="regResultDiv"></div>
